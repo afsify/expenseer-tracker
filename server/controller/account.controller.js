@@ -1,44 +1,22 @@
-import { User } from "../model/user.model.js";
 import asyncHandler from "express-async-handler";
 import { AppError } from "../middleware/error.js";
 import { Account } from "../model/account.model.js";
 
-//! ============================================= Update Profile =============================================
+//! ============================================= Create Account =============================================
+export const createAccount = asyncHandler(async (req, res) => {
+  const { name, type, balance, currency, description } = req.body;
 
-export const updateProfile = asyncHandler(async (req, res) => {
-  const { name, phone, place, image } = req.body;
-  const userId = req.user._id;
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new AppError("User not found", 404);
+  // Validate required fields
+  if (!name || !type) {
+    throw new AppError("Name and type are required fields", 400);
   }
 
-  user.name = name;
-  user.phone = phone;
-  user.place = place;
-  user.image = image;
-  await user.save();
-
-  const userData = await User.findById(req.user._id, {
-    password: 0,
-    createdAt: 0,
-    updatedAt: 0,
-    __v: 0,
-  });
-
-  res.status(200).json({
-    message: "Profile Updated",
-    success: true,
-    userData,
-  });
-});
-
-//! ============================================= Account Controllers =============================================
-
-export const createAccount = asyncHandler(async (req, res) => {
   const account = new Account({
-    ...req.body,
+    name,
+    type,
+    balance: balance || 0,
+    currency: currency || "INR",
+    description,
     userId: req.user._id,
   });
 
@@ -51,11 +29,16 @@ export const createAccount = asyncHandler(async (req, res) => {
   });
 });
 
+//! ============================================= Get All Accounts =============================================
 export const getAccounts = asyncHandler(async (req, res) => {
   const accounts = await Account.find({
     userId: req.user._id,
     isActive: true,
-  });
+  }).sort({ createdAt: -1 });
+
+  if (!accounts || accounts.length === 0) {
+    throw new AppError("No accounts found", 404);
+  }
 
   res.status(200).json({
     success: true,
@@ -64,15 +47,26 @@ export const getAccounts = asyncHandler(async (req, res) => {
   });
 });
 
+//! ============================================= Update Account =============================================
 export const updateAccount = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  if (Object.keys(updateData).length === 0) {
+    throw new AppError("No update data provided", 400);
+  }
+
   const account = await Account.findOneAndUpdate(
-    { _id: req.params.id, userId: req.user._id },
-    req.body,
-    { new: true, runValidators: true }
+    { _id: id, userId: req.user._id },
+    updateData,
+    {
+      new: true,
+      runValidators: true,
+    }
   );
 
   if (!account) {
-    throw new AppError("Account not found", 404);
+    throw new AppError("Account not found or you don't have permission", 404);
   }
 
   res.status(200).json({
@@ -82,19 +76,42 @@ export const updateAccount = asyncHandler(async (req, res) => {
   });
 });
 
+//! ============================================= Delete Account =============================================
 export const deleteAccount = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
   const account = await Account.findOneAndUpdate(
-    { _id: req.params.id, userId: req.user._id },
+    { _id: id, userId: req.user._id },
     { isActive: false },
     { new: true }
   );
 
   if (!account) {
-    throw new AppError("Account not found", 404);
+    throw new AppError("Account not found or you don't have permission", 404);
   }
 
   res.status(200).json({
     success: true,
     message: "Account deactivated successfully",
+  });
+});
+
+//! ============================================= Get Account by ID =============================================
+export const getAccountById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const account = await Account.findOne({
+    _id: id,
+    userId: req.user._id,
+    isActive: true,
+  });
+
+  if (!account) {
+    throw new AppError("Account not found or you don't have permission", 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    account,
   });
 });
