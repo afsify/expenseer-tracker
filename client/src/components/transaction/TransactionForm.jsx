@@ -9,7 +9,6 @@ const TransactionForm = ({ onSuccess }) => {
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { errors },
   } = useForm();
   const { authToken } = useAuth();
