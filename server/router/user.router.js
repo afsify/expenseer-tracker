@@ -1,7 +1,20 @@
 import express from "express";
 const userRouter = express.Router();
 import { authorize, protect } from "../middleware/auth.js";
-import { updateProfile } from "../controller/account.controller.js";
+import { updateProfile } from "../controller/profile.controller.js";
+import {
+  createTransaction,
+  batchUpload,
+  getTransactions,
+  getAnalytics,
+} from "../controller/transaction.controller.js";
+import {
+  createAccount,
+  getAccounts,
+  getAccountById,
+  updateAccount,
+  deleteAccount,
+} from "../controller/account.controller.js";
 import {
   checkOTP,
   contactMessage,
@@ -33,5 +46,28 @@ userRouter.post("/contact-message", contactMessage);
 //? ================================================ Profile ================================================
 
 userRouter.post("/update-profile", protect, updateProfile);
+
+//? ============================================= Account Routes =============================================
+
+userRouter
+  .route("/account")
+  .post(protect, createAccount)
+  .get(protect, getAccounts);
+
+userRouter
+  .route("/account/:id")
+  .get(protect, getAccountById)
+  .put(protect, updateAccount)
+  .delete(protect, deleteAccount);
+
+//? ============================================= Transaction Routes =============================================
+
+userRouter
+  .route("/transaction")
+  .post(protect, createTransaction)
+  .get(protect, getTransactions);
+
+userRouter.post("/transaction/batch", protect, batchUpload);
+userRouter.get("/transaction/analytics", protect, getAnalytics);
 
 export default userRouter;

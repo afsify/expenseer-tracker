@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Image as AntImage } from "antd";
-import links from "../../assets/links";
+import links from "../../assets/image/links";
 
 function LoginCard({ children }) {
   return (

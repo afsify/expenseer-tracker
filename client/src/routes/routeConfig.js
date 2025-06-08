@@ -8,14 +8,11 @@ export const adminPath = {
 };
 
 export const userPath = {
-  home: "/",
-  shop: "/shop",
-  cart: "/cart",
+  accountManager: "/",
+  transaction: "/transaction",
   login: "/login",
-  about: "/about",
   signin: "/signin",
   signup: "/signup",
-  contact: "/contact",
   profile: "/profile",
   register: "/register",
   resetOTP: "/reset-otp",

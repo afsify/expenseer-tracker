@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { createTransaction, getAccounts } from "../../services/expenseService";
 
 const TransactionForm = ({ onSuccess }) => {
   const {
@@ -11,7 +10,6 @@ const TransactionForm = ({ onSuccess }) => {
     watch,
     formState: { errors },
   } = useForm();
-  const { authToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const [transactionType, setTransactionType] = useState("expense");
@@ -21,17 +19,15 @@ const TransactionForm = ({ onSuccess }) => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await axios.get("/api/accounts", {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        setAccounts(response.data);
+        const response = await getAccounts();
+        setAccounts(response.data.accounts);
       } catch (error) {
         console.error("Error fetching accounts:", error);
       }
     };
 
     fetchAccounts();
-  }, [authToken]);
+  }, []);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -41,13 +37,11 @@ const TransactionForm = ({ onSuccess }) => {
         ...data,
         accounts: accounts.map((acc) => ({
           accountId: acc._id,
-          balance: acc.balance, // You would calculate the new balance based on the transaction
+          balance: acc.balance,
         })),
       };
 
-      const response = await axios.post("/api/transactions", transactionData, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const response = await createTransaction(transactionData);
       onSuccess(response.data);
       reset();
     } catch (error) {

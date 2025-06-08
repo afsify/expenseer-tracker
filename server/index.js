@@ -26,7 +26,7 @@ app.use(
   })
 );
 
-app.use("/api/user", userRouter);
+app.use("/api", userRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -6,14 +6,11 @@ import PrivateRoute from "../auth/PrivateRoute";
 import { Routes, Route } from "react-router-dom";
 import ServerError from "../pages/error/ServerError";
 
-const Home = lazy(() => import("../pages/user/Home"));
-const Shop = lazy(() => import("../pages/user/Shop"));
-const Cart = lazy(() => import("../pages/user/Cart"));
+const AccountManager = lazy(() => import("../pages/user/AccountManager"));
+const TransactionForm = lazy(() => import("../components/transaction/TransactionForm"));
 const Login = lazy(() => import("../pages/user/Login"));
-const About = lazy(() => import("../pages/user/About"));
 const SignIn = lazy(() => import("../pages/user/SignIn"));
 const SignUp = lazy(() => import("../pages/user/SignUp"));
-const Contact = lazy(() => import("../pages/user/Contact"));
 const Profile = lazy(() => import("../pages/user/Profile"));
 const Register = lazy(() => import("../pages/user/Register"));
 const ResetOTP = lazy(() => import("../pages/user/ResetOTP"));
@@ -36,12 +33,9 @@ function UserRoute() {
       </Route>
       <Route path="/*" element={<NotFound />} />
       <Route path="error" element={<ServerError />} />
-      <Route path={userPath.home} element={<Home />} />
-      <Route path={userPath.shop} element={<Shop />} />
-      <Route path={userPath.cart} element={<Cart />} />
-      <Route path={userPath.about} element={<About />} />
-      <Route path={userPath.contact} element={<Contact />} />
       <Route element={<PrivateRoute role={"user"} route={userPath.home} />}>
+      <Route path={userPath.accountManager} element={<AccountManager />} />
+      <Route path={userPath.transaction} element={<TransactionForm />} />
         <Route path={userPath.profile} element={<Profile />} />
       </Route>
     </Routes>

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { createAccount, getAccounts } from "../../services/expenseService";
 
 const AccountManager = () => {
-  const { authToken } = useAuth();
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newAccount, setNewAccount] = useState({
@@ -17,10 +15,8 @@ const AccountManager = () => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await axios.get("/api/accounts", {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        setAccounts(response.data);
+        const response = await getAccounts();
+        setAccounts(response.data.accounts);
       } catch (error) {
         console.error("Error fetching accounts:", error);
       } finally {
@@ -29,14 +25,12 @@ const AccountManager = () => {
     };
 
     fetchAccounts();
-  }, [authToken]);
+  }, []);
 
   const handleCreateAccount = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/accounts", newAccount, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const response = await createAccount(newAccount);
       setAccounts([...accounts, response.data]);
       setNewAccount({
         name: "",
@@ -127,7 +121,6 @@ const AccountManager = () => {
                 <option value="INR">Indian Rupee (₹)</option>
                 <option value="USD">US Dollar ($)</option>
                 <option value="EUR">Euro (€)</option>
-                {/* Add more currencies as needed */}
               </select>
             </div>
           </div>
