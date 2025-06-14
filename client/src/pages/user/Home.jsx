@@ -22,8 +22,6 @@ function Home() {
         <Banner />
         <div className="max-w-container mx-auto px-4">
           <NewArrival />
-          <BestSeller />
-          <SpecialOffer />
         </div>
       </motion.div>
     </UserLayout>
