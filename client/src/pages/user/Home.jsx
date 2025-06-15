@@ -2,8 +2,6 @@ import { motion } from "framer-motion";
 import Banner from "../../components/user/Banner";
 import UserLayout from "../../layout/UserLayout";
 import NewArrival from "../../components/user/home/NewArrival";
-import BestSeller from "../../components/user/home/BestSeller";
-import SpecialOffer from "../../components/user/home/SpecialOffer";
 
 function Home() {
   const fadeIn = {
