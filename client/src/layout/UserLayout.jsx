@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Footer from "../components/user/Footer";
 import { getUser } from "../services/userService";
 import Header from "../components/user/Header";
-import HeaderBottom from "../components/user/HeaderBottom";
 import FooterBottom from "../components/user/FooterBottom";
 
 const UserLayout = ({ children, showFooter = true }) => {
@@ -29,7 +28,6 @@ const UserLayout = ({ children, showFooter = true }) => {
   return (
     <div>
       <Header />
-      <HeaderBottom />
       <main className="container mx-auto mb-5 min-h-[85vh]">{children}</main>
       {showFooter && (
         <>
