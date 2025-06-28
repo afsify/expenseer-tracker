@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import { HiMenuAlt2 } from "react-icons/hi";
-import { motion } from "framer-motion";
 import { userPath } from "../../routes/routeConfig";
 
 const Header = () => {
