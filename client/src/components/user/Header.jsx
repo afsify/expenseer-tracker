@@ -50,7 +50,7 @@ const Header = () => {
       <nav className="h-full px-4 max-w-container mx-auto relative">
         <div className="flex items-center justify-between h-full">
           <Link to={userPath.home}>
-            <h1 className="text-4xl font-signature">Ruramart</h1>
+            <h1 className="text-4xl font-signature">Expenseer</h1>
           </Link>
           <div>
             {showMenu && (
