@@ -8,7 +8,7 @@ const FooterBottom = () => {
           <span className="text-md mr-[1px] mt-[2px] md:mt-0 text-center hidden md:inline-flex">
             <AiOutlineCopyright />
           </span>
-          Copyright {new Date().getFullYear()} | Ruramart Directory | All Rights
+          Copyright {new Date().getFullYear()} | Expenseer | All Rights
           Reserved |
           <a href="https://solo.to/afsify" target="_blank" rel="noreferrer">
             <span className="ml-1 font-medium group-hover:text-primeColor">
